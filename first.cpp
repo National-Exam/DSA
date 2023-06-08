@@ -242,8 +242,8 @@ int main()
     else if (splitString(command)[0] == "cases"){
       vector<string> splittedString = splitString(command);
       int cases = splittedString.size() > 2 ? countCases("cases.csv", splittedString[1],splittedString[2]) : countCases("cases.csv", splittedString[1]);
-      string msg = splittedString.size() > 2 ? "Cases of" + splittedString[1] + "at" + splittedString[2] : "Total cases of " + splittedString[1];
-      cout  << cases << endl;
+      string msg = splittedString.size() > 2 ? "Cases of" + splittedString[1] + "at" + splittedString[2] : "Total cases of " + splittedString[1] + " = " + to_string(cases);
+      cout  << msg << endl;
     }
         else if (command == "quit")
         {
