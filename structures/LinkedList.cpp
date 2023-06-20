@@ -1,30 +1,96 @@
 #include <iostream>
 
-namespace std;
-
-// Node class representing a single node in the linked list
-class Node
-{
-public:
-    int data;   // Data stored in the node
-    Node *next; // Pointer to the next node in the list
-
-    // Constructor
-    Node(int value) : data(value), next(nullptr) {}
-};
-
-// Linked list class
+template <typename T>
 class LinkedList
 {
 private:
-    Node *head; // Pointer to the first node in the list
+    struct Node
+    {
+        T data;
+        Node *next;
+
+        Node(const T &value) : data(value), next(nullptr) {}
+    };
+
+    Node *head;
+    std::size_t size;
 
 public:
-    // Constructor
-    LinkedList() : head(nullptr) {}
+    LinkedList() : head(nullptr), size(0) {}
 
-    // Destructor to deallocate memory
     ~LinkedList()
+    {
+        clear();
+    }
+
+    void insert(const T &value)
+    {
+        Node *newNode = new Node(value);
+
+        if (head == nullptr)
+        {
+            head = newNode;
+        }
+        else
+        {
+            Node *current = head;
+            while (current->next != nullptr)
+            {
+                current = current->next;
+            }
+            current->next = newNode;
+        }
+
+        size++;
+    }
+
+    void remove(const T &value)
+    {
+        Node *current = head;
+        Node *previous = nullptr;
+
+        while (current != nullptr)
+        {
+            if (current->data == value)
+            {
+                if (previous == nullptr)
+                {
+                    head = current->next;
+                }
+                else
+                {
+                    previous->next = current->next;
+                }
+                delete current;
+                size--;
+                return;
+            }
+
+            previous = current;
+            current = current->next;
+        }
+    }
+
+    bool contains(const T &value) const
+    {
+        Node *current = head;
+        while (current != nullptr)
+        {
+            if (current->data == value)
+            {
+                return true;
+            }
+            current = current->next;
+        }
+        return false;
+    }
+
+    std::size_t getSize() const
+    {
+        return size;
+    }
+
+    void clear()
     {
         Node *current = head;
         while (current != nullptr)
@@ -33,40 +99,41 @@ public:
             delete current;
             current = next;
         }
+        head = nullptr;
+        size = 0;
     }
 
-    // Function to insert a new node at the beginning of the list
-    void insert(int value)
-    {
-        Node *newNode = new Node(value);
-        newNode->next = head;
-        head = newNode;
-    }
-
-    // Function to print the linked list
-    void display()
+    void display() const
     {
         Node *current = head;
         while (current != nullptr)
         {
-            cout << current->data << " ";
+            std::cout << current->data << " ";
             current = current->next;
         }
-        cout << endl;
+        std::cout << std::endl;
     }
 };
 
 int main()
 {
-    LinkedList myList;
+    LinkedList<int> linkedList;
 
-    // Inserting nodes
-    myList.insert(3);
-    myList.insert(7);
-    myList.insert(12);
+    linkedList.insert(10);
+    linkedList.insert(20);
+    linkedList.insert(30);
+    linkedList.display(); // Output: 10 20 30
 
-    // Displaying the list
-    myList.display();
+    linkedList.remove(20);
+    linkedList.display(); // Output: 10 30
+
+    std::cout << "Size: " << linkedList.getSize() << std::endl; // Output: Size: 2
+
+    std::cout << "Contains 30? " << (linkedList.contains(30) ? "Yes" : "No") << std::endl; // Output: Contains 30? Yes
+    std::cout << "Contains 40? " << (linkedList.contains(40) ? "Yes" : "No") << std::endl; // Output: Contains 40? No
+
+    linkedList.clear();
+    std::cout << "Size after clearing: " << linkedList.getSize() << std::endl; // Output: Size after clearing: 0
 
     return 0;
 }
