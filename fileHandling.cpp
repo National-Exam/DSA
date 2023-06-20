@@ -5,14 +5,14 @@
 
 using namespace std;
 
-void writeToFile(const string &filename, const vector<vector<string>> &data)
+void writeToFile(const string& filename, const vector<vector<string>>& data)
 {
     ofstream file(filename);
     if (file.is_open())
     {
-        for (const auto &row : data)
+        for (const auto& row : data)
         {
-            for (const auto &col : row)
+            for (const auto& col : row)
             {
                 file << col << ",";
             }
